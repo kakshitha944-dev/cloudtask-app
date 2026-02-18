@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="POST">
+    <input type="text" name="title" placeholder="Task Title" required><br><br>
+    <textarea name="description" placeholder="Description"></textarea><br><br>
+    <button type="submit">Add Task</button>
+</form>
+
+{% endblock %}
