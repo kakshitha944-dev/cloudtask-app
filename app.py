@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for
 from models import db, User, Task
 from flask_login import (
@@ -11,7 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "supersecretkey"
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-key')
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///tasks.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -164,4 +165,4 @@ def edit_task(id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
