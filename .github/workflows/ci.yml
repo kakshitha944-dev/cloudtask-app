@@ -1,4 +1,3 @@
-
 name: CloudTask CI/CD Pipeline
 
 # ── Trigger ────────────────────────────────────────────────────────────────
@@ -18,26 +17,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1a. Checkout the repository code
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # 1b. Set up the Python runtime
       - name: Set up Python 3.10
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      # 1c. Install application dependencies plus analysis tools
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install flake8 bandit
 
-      # 1d. Lint with flake8 — enforces PEP 8 code style
-      #     max-line-length=100 is the project-agreed limit.
-      #     E501 (line-too-long) is excluded because templates may be long.
       - name: Static Code Analysis — flake8
         run: |
           flake8 . \
@@ -45,9 +38,6 @@ jobs:
             --exclude=.git,__pycache__,*.pyc \
             --statistics
 
-      # 1e. Security vulnerability scan with Bandit
-      #     -ll = report MEDIUM and HIGH severity issues only.
-      #     -r  = recursive scan of the whole project.
       - name: Security Vulnerability Analysis — Bandit
         run: |
           bandit -r . \
@@ -62,38 +52,34 @@ jobs:
   sonarcloud:
     name: "SonarCloud — Code Quality & Security"
     runs-on: ubuntu-latest
-    needs: build          # Only runs if Stage 1 passes
+    needs: build
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          # Full git history is required by SonarCloud for accurate blame data
           fetch-depth: 0
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # auto-provided by GitHub
-          SONAR_TOKEN:  ${{ secrets.SONAR_TOKEN }}     # set manually in secrets
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN:  ${{ secrets.SONAR_TOKEN }}
 
   # ══════════════════════════════════════════════════════════════════════════
   # STAGE 3 — DEPLOY TO AWS EC2 (SSH)
   # Requires secrets: EC2_HOST, EC2_USER, EC2_SSH_KEY
-  # Only runs on pushes to main (not on pull requests).
   # ══════════════════════════════════════════════════════════════════════════
   deploy:
     name: "Deploy to EC2 via SSH"
     runs-on: ubuntu-latest
-    needs: sonarcloud     # Only deploys if SonarCloud passes
+    needs: sonarcloud
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # SSH into the EC2 instance, pull the latest code, reinstall
-      # dependencies, and restart the Gunicorn systemd service.
       - name: SSH Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -102,38 +88,28 @@ jobs:
           key:      ${{ secrets.EC2_SSH_KEY }}
           script: |
             set -e
-
             echo "=== Pulling latest code ==="
             cd /home/ubuntu/cloudtask
             git pull origin main
-
             echo "=== Installing / updating Python dependencies ==="
             source venv/bin/activate
             pip install --quiet -r requirements.txt
-
             echo "=== Restarting Gunicorn service ==="
             sudo systemctl restart cloudtask
-
             echo "=== Deployment complete ==="
 
   # ══════════════════════════════════════════════════════════════════════════
   # STAGE 4 — OWASP ZAP DYNAMIC APPLICATION SECURITY SCAN
-  # Runs against the live deployed application on EC2.
-  # Requires secret: EC2_HOST (reused from deploy stage)
   # ══════════════════════════════════════════════════════════════════════════
   zap_scan:
     name: "OWASP ZAP — Dynamic Security Scan"
     runs-on: ubuntu-latest
-    needs: deploy         # Only scans after successful deployment
+    needs: deploy
 
     steps:
-      # Give Gunicorn a few seconds to fully restart before scanning
       - name: Wait for app to be ready
         run: sleep 15
 
-      # ZAP Baseline Scan — passive scan, does not attack the application.
-      # -I flag means "do not fail the build" (informational mode).
-      # Replace the target URL with your actual EC2 public IP/DNS.
       - name: OWASP ZAP Baseline Scan
         uses: zaproxy/action-baseline@v0.12.0
         with:
@@ -141,38 +117,9 @@ jobs:
           rules_file_name: ".zap/rules.tsv"
           cmd_options: "-I"
 
-      # Upload the ZAP HTML report as a downloadable build artefact
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: zap-security-report
           path: report_html.html
-=======
-name: CloudTask CI Pipeline
-
-on:
-  push:
-    branches: [ main ]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-
-      - name: Run app test
-        run: |
-          python -m py_compile app.py
->>>>>>> ffa607197a15401bfac736318ccac8c47b0115c7
