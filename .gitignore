@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+*.whl
+
+# Virtual environment — never commit the venv folder
+venv/
+env/
+.venv/
+
+# SQLite database — don't commit the local DB
+*.db
+*.sqlite3
+
+# Environment variables — NEVER commit secrets
+.env
+.env.*
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+desktop.ini
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# ZAP reports
+report_html.html
+report_json.json
+report_xml.xml
+report_md.md

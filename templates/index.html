@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}My Tasks{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">
+        <i class="bi bi-list-task me-2 text-primary"></i>My Tasks
+    </h2>
+    <a href="{{ url_for('add_task') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> New Task
+    </a>
+</div>
+
+{% if tasks %}
+    <div class="row g-3">
+        {% for task in tasks %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card task-card h-100">
+                <div class="card-body d-flex flex-column">
+                    <!-- Status badge -->
+                    <div class="mb-2">
+                        <span class="badge badge-{{ task.status }} rounded-pill px-3 py-1">
+                            {% if task.status == 'pending' %}
+                                <i class="bi bi-clock me-1"></i>Pending
+                            {% elif task.status == 'in_progress' %}
+                                <i class="bi bi-arrow-repeat me-1"></i>In Progress
+                            {% else %}
+                                <i class="bi bi-check-circle me-1"></i>Done
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <h5 class="card-title fw-semibold">{{ task.title }}</h5>
+
+                    {% if task.description %}
+                        <p class="card-text text-muted flex-grow-1">
+                            {{ task.description }}
+                        </p>
+                    {% else %}
+                        <p class="card-text text-muted fst-italic flex-grow-1">
+                            No description provided.
+                        </p>
+                    {% endif %}
+
+                    <!-- Action buttons -->
+                    <div class="d-flex gap-2 mt-3">
+                        <a href="{{ url_for('edit_task', task_id=task.id) }}"
+                           class="btn btn-outline-primary btn-sm flex-fill">
+                            <i class="bi bi-pencil me-1"></i>Edit
+                        </a>
+
+                        <!-- DELETE uses POST to protect against CSRF via GET -->
+                        <form action="{{ url_for('delete_task', task_id=task.id) }}"
+                              method="POST" class="flex-fill"
+                              onsubmit="return confirm('Delete this task?');">
+                            <button type="submit"
+                                    class="btn btn-outline-danger btn-sm w-100">
+                                <i class="bi bi-trash me-1"></i>Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+{% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-inbox display-1 text-muted"></i>
+        <h4 class="mt-3 text-muted">No tasks yet</h4>
+        <p class="text-muted">Click <strong>New Task</strong> to get started.</p>
+        <a href="{{ url_for('add_task') }}" class="btn btn-primary mt-2">
+            <i class="bi bi-plus-lg me-1"></i> Add your first task
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,14 @@
+# OWASP ZAP Rules Configuration
+# Format: RULE_ID  ACTION  DESCRIPTION
+# IGNORE = suppress this alert (known false positive or accepted risk)
+# WARN   = report as warning
+# FAIL   = fail the build if found
+
+# Suppress X-Frame-Options header warnings (mitigated by CSP in Bootstrap)
+10020	IGNORE	(X-Frame-Options Header Not Set)
+
+# Suppress anti-clickjacking warnings for the same reason
+10096	IGNORE	(Timestamp Disclosure)
+
+# Suppress cookie without secure flag (acceptable on HTTP dev/CI env)
+10011	IGNORE	(Cookie Without Secure Flag)

@@ -1,0 +1,28 @@
+[Unit]
+Description=CloudTask Flask Application (Gunicorn)
+After=network.target
+
+[Service]
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/cloudtask
+
+# Load environment variables — never hardcode secrets in source code
+Environment="SECRET_KEY=REPLACE_WITH_STRONG_RANDOM_KEY"
+Environment="DATABASE_URL=sqlite:////home/ubuntu/cloudtask/tasks.db"
+
+# Start Gunicorn with 3 worker processes bound to port 5000
+# 'app:app' = the 'app' Flask object inside app.py
+ExecStart=/home/ubuntu/cloudtask/venv/bin/gunicorn \
+    --workers 3 \
+    --bind 0.0.0.0:5000 \
+    --access-logfile /home/ubuntu/cloudtask/logs/access.log \
+    --error-logfile /home/ubuntu/cloudtask/logs/error.log \
+    app:app
+
+# Restart the service if it crashes
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
