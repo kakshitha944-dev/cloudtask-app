@@ -37,8 +37,9 @@ jobs:
           host: 54.234.206.60
           username: ubuntu
           key: ${{ secrets.EC2_KEY }}
+          port: 22
           script: |
-            cd cloudtask-app
+            cd /home/ubuntu/cloudtask-app
             git pull origin main
             pkill -f "python3 app.py" || true
             nohup python3 app.py &
