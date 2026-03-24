@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -46,10 +47,21 @@
             transform: translateY(-2px);
             transition: transform 0.15s ease;
         }
+=======
+<html>
+<head>
+    <title>CloudTask</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        a { margin-right: 10px; }
+        li { margin-bottom: 15px; }
+        button { padding: 5px 10px; }
+>>>>>>> ffa607197a15401bfac736318ccac8c47b0115c7
     </style>
 </head>
 <body>
 
+<<<<<<< HEAD
 <!-- ── Navigation ─────────────────────────────────────────────────────── -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container">
@@ -124,5 +136,20 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc4s9bIOgUxi8T/jzmFgMBtW4VMOFKeq8V1lCdKb3iXm"
     crossorigin="anonymous">
 </script>
+=======
+    <h1>CloudTask - Task Manager</h1>
+
+    {% if current_user.is_authenticated %}
+        <p>
+            Logged in as {{ current_user.username }} |
+            <a href="/logout">Logout</a>
+        </p>
+    {% endif %}
+
+    <hr>
+
+    {% block content %}{% endblock %}
+
+>>>>>>> ffa607197a15401bfac736318ccac8c47b0115c7
 </body>
 </html>

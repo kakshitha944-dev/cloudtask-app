@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+<<<<<<< HEAD
 {% block title %}Edit Task{% endblock %}
 
 {% block content %}
@@ -73,4 +74,20 @@
         </div>
     </div>
 </div>
+=======
+{% block content %}
+
+<form method="POST">
+    <input type="text" name="title" value="{{ task.title }}" required><br><br>
+    <textarea name="description">{{ task.description }}</textarea><br><br>
+
+    <select name="status">
+        <option value="Pending" {% if task.status == "Pending" %}selected{% endif %}>Pending</option>
+        <option value="Completed" {% if task.status == "Completed" %}selected{% endif %}>Completed</option>
+    </select><br><br>
+
+    <button type="submit">Update Task</button>
+</form>
+
+>>>>>>> ffa607197a15401bfac736318ccac8c47b0115c7
 {% endblock %}
