@@ -104,7 +104,7 @@ jobs:
           script: |
             set -e
             echo "=== Pulling latest code ==="
-            cd /home/ubuntu/cloudtask
+            cd /home/ubuntu/cloudtask-app
             git pull origin main
             echo "=== Updating Python dependencies ==="
             source venv/bin/activate
