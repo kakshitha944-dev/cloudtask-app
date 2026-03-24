@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-<<<<<<< HEAD
 {% block title %}Edit Task{% endblock %}
 
 {% block content %}
@@ -48,15 +47,15 @@
                     <select id="status" name="status" class="form-select">
                         <option value="pending"
                             {% if task.status == 'pending' %}selected{% endif %}>
-                            ⏳ Pending
+                            Pending
                         </option>
                         <option value="in_progress"
                             {% if task.status == 'in_progress' %}selected{% endif %}>
-                            🔄 In Progress
+                            In Progress
                         </option>
                         <option value="done"
                             {% if task.status == 'done' %}selected{% endif %}>
-                            ✅ Done
+                            Done
                         </option>
                     </select>
                 </div>
@@ -74,20 +73,4 @@
         </div>
     </div>
 </div>
-=======
-{% block content %}
-
-<form method="POST">
-    <input type="text" name="title" value="{{ task.title }}" required><br><br>
-    <textarea name="description">{{ task.description }}</textarea><br><br>
-
-    <select name="status">
-        <option value="Pending" {% if task.status == "Pending" %}selected{% endif %}>Pending</option>
-        <option value="Completed" {% if task.status == "Completed" %}selected{% endif %}>Completed</option>
-    </select><br><br>
-
-    <button type="submit">Update Task</button>
-</form>
-
->>>>>>> ffa607197a15401bfac736318ccac8c47b0115c7
 {% endblock %}

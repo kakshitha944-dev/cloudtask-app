@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Python
 __pycache__/
 *.py[cod]
@@ -41,10 +40,3 @@ report_html.html
 report_json.json
 report_xml.xml
 report_md.md
-=======
-venv/
-__pycache__/
-instance/
-*.db
-.env
->>>>>>> ffa607197a15401bfac736318ccac8c47b0115c7

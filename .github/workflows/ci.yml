@@ -6,7 +6,6 @@ on:
   pull_request:
     branches: [main]
 
-# Opt into Node.js 24 now to suppress deprecation warnings
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -33,9 +32,6 @@ jobs:
           pip install -r requirements.txt
           pip install flake8 bandit
 
-      # flake8 runs and saves a report but does NOT fail the build (|| true).
-      # This allows the pipeline to continue to SonarCloud and deploy stages.
-      # Findings are uploaded as an artifact and documented in the report.
       - name: Static Code Analysis — flake8
         run: |
           flake8 . \
@@ -47,7 +43,6 @@ jobs:
           echo "--- flake8 findings ---"
           cat flake8-report.txt || echo "No issues found"
 
-      # bandit runs and saves a report but does NOT fail the build (|| true).
       - name: Security Vulnerability Analysis — Bandit
         run: |
           bandit -r . \
@@ -69,7 +64,6 @@ jobs:
 
   # ══════════════════════════════════════════════════════════════════════════
   # STAGE 2 — SONARCLOUD ANALYSIS
-  # Requires: SONAR_TOKEN secret in GitHub Settings → Secrets
   # ══════════════════════════════════════════════════════════════════════════
   sonarcloud:
     name: "SonarCloud — Code Quality & Security"
@@ -90,8 +84,6 @@ jobs:
 
   # ══════════════════════════════════════════════════════════════════════════
   # STAGE 3 — DEPLOY TO AWS EC2 via SSH
-  # Requires: EC2_HOST, EC2_USER, EC2_SSH_KEY secrets
-  # Only runs on direct pushes to main (not pull requests)
   # ══════════════════════════════════════════════════════════════════════════
   deploy:
     name: "Deploy to EC2 via SSH"
@@ -122,8 +114,7 @@ jobs:
             echo "=== Deployment complete ==="
 
   # ══════════════════════════════════════════════════════════════════════════
-  # STAGE 4 — OWASP ZAP DYNAMIC APPLICATION SECURITY SCAN
-  # Scans the live deployed app on EC2 after deployment
+  # STAGE 4 — OWASP ZAP DYNAMIC SECURITY SCAN
   # ══════════════════════════════════════════════════════════════════════════
   zap_scan:
     name: "OWASP ZAP — Dynamic Security Scan"
