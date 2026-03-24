@@ -1,7 +1,8 @@
-deploy:
-  needs: build
-  runs-on: ubuntu-latest
+service:
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
 
-  steps:
-    - name: Trigger deployment
-      run: echo "Code pushed - pull manually on EC2"
+    steps:
+      - name: Trigger deployment
+        run: echo "Code pushed - pull manually on EC2"
