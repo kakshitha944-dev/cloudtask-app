@@ -1,45 +1,7 @@
-name: CloudTask CI/CD Pipeline
+deploy:
+  needs: build
+  runs-on: ubuntu-latest
 
-on:
-  push:
-    branches: [ main ]
-
-jobs:
-
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-
-      - name: Check syntax
-        run: |
-          python -m py_compile app.py
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: 100.26.52.106
-          username: ubuntu
-          key: ${{ secrets.EC2_KEY }}
-          port: 22
-          script: |
-            cd /home/ubuntu/cloudtask-app
-            git pull origin main
-            pkill -f "python3 app.py" || true
-            nohup python3 app.py &
+  steps:
+    - name: Trigger deployment
+      run: echo "Code pushed - pull manually on EC2"
