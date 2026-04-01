@@ -11,7 +11,6 @@ from flask_login import (
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 
-
 # ── Application factory ────────────────────────────────────────────────────
 app = Flask(__name__)
 
