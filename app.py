@@ -152,7 +152,8 @@ def index():
 @app.route("/add", methods=["GET", "POST"])
 @login_required
 def add_task():
-    """Create a new task for the current user."""
+    """Create a new task for the current user.
+    Validates title length before saving to database."""
     if request.method == "POST":
         title = request.form.get("title", "").strip()
         description = request.form.get("description", "").strip()
