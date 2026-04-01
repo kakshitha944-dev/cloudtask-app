@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ============================================================
 # EC2 First-Time Setup Script
-# Run this ONCE manually after launching your EC2 instance.
+# Run this ONCE manually after launching EC2 instance.
 # Ubuntu 22.04 LTS assumed.
 # Usage:  bash ec2_setup.sh
 # ============================================================
@@ -22,8 +22,8 @@ sudo apt-get install -y python3 python3-pip python3-venv git
 # ── 3. Clone the repository ────────────────────────────────
 echo "[3/7] Cloning the CloudTask repository..."
 cd /home/ubuntu
-# Replace the URL below with your actual GitHub repo URL
-git clone https://github.com/YOUR_GITHUB_USERNAME/cloudtask.git
+# Replace the URL below with actual GitHub repo URL
+git clone https://github.com/kakshitha944-dev/cloudtask-app.git
 cd cloudtask
 
 # ── 4. Create virtual environment and install dependencies ─

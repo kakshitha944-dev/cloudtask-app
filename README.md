@@ -36,7 +36,7 @@ GitHub Actions
 ```bash
 # In VS Code terminal
 git init
-git remote add origin https://github.com/YOUR_USERNAME/cloudtask.git
+git remote add origin https://github.com/kakshitha944-dev/cloudtask-app.git
 git add .
 git commit -m "Initial commit"
 git push -u origin main
@@ -45,12 +45,11 @@ git push -u origin main
 ### Step 2 — Set up SonarCloud
 
 1. Go to https://sonarcloud.io and sign in with GitHub.
-2. Click **+** → **Analyze new project** → select your repo.
+2. Click **+** → **Analyze new project** → select repo.
 3. Choose **GitHub Actions** as the analysis method.
-4. Copy your **SONAR_TOKEN**.
+4. Copy **SONAR_TOKEN**.
 5. Edit `sonar-project.properties`:
-   - Replace `YOUR_GITHUB_USERNAME` with your GitHub username.
-   - Replace `YOUR_SONARCLOUD_ORG` with your SonarCloud org name.
+   name.
 
 ### Step 3 — Launch and configure EC2
 
@@ -60,20 +59,20 @@ git push -u origin main
 4. SSH into the instance and run the setup script:
 
 ```bash
-ssh -i your-key.pem ubuntu@YOUR_EC2_IP
+ssh -i cloudtask-key.pem.pem ubuntu@52.70.164.148
 # Upload ec2_setup.sh then run:
 bash ec2_setup.sh
 ```
 
 ### Step 4 — Add GitHub Secrets
 
-In your GitHub repo: **Settings → Secrets and variables → Actions → New repository secret**
+In  GitHub repo: **Settings → Secrets and variables → Actions → New repository secret**
 
 | Secret Name   | Value                                      |
 |---------------|--------------------------------------------|
-| `EC2_HOST`    | Your EC2 public IP e.g. `18.123.45.67`    |
+| `EC2_HOST`    | EC2 public IP     |
 | `EC2_USER`    | `ubuntu`                                   |
-| `EC2_SSH_KEY` | Full contents of your `.pem` private key   |
+| `EC2_SSH_KEY` | Full contents of `.pem` private key   |
 | `SONAR_TOKEN` | Token from SonarCloud                      |
 
 ### Step 5 — Make a change and trigger the pipeline
@@ -94,7 +93,7 @@ Watch the pipeline run in **GitHub → Actions tab**.
 
 ```bash
 # Clone and set up
-git clone https://github.com/YOUR_USERNAME/cloudtask.git
+git clone https://github.com/kakshitha944-dev/cloudtask-app.git
 cd cloudtask
 python3 -m venv venv
 source venv/bin/activate      # Windows: venv\Scripts\activate
